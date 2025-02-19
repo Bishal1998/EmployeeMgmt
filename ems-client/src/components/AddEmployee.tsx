@@ -1,5 +1,6 @@
 import { addEmployee } from "../services/EmployeeService";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface Employee {
   firstName: string;
@@ -16,6 +17,7 @@ const AddEmployee = () => {
 
   const [errors, setErrors] = useState<Partial<Employee>>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Employee> = {};
@@ -44,8 +46,8 @@ const AddEmployee = () => {
     setIsLoading(true);
 
     if (validateForm()) {
-      console.log(formData);
       await addEmployee(formData);
+      navigate("/employees");
       // Reset form if needed
       setFormData({ firstName: "", lastName: "", email: "" });
     }
