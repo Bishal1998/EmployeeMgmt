@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import listEmployees from "../services/EmployeeService";
 
 interface Employee {
@@ -12,6 +13,8 @@ const ListEmployee = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -54,12 +57,22 @@ const ListEmployee = () => {
     );
   }
 
+  const addEmployee = () => {
+    navigate("/add-employee");
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto my-8 px-4">
       <h2 className="font-bold text-2xl mb-6 text-gray-800">
         List of Employees ({employees.length})
       </h2>
 
+      <div
+        onClick={addEmployee}
+        className="bg-gray-500 hover:bg-gray-400 w-fit cursor-pointer text-white p-2 rounded-lg mb-2"
+      >
+        Add Employee
+      </div>
       {employees.length === 0 ? (
         <div className="text-center py-8 bg-gray-50 rounded-lg">
           <p className="text-gray-600">No employees found.</p>
