@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import listEmployees from "../services/EmployeeService";
+import { listEmployees } from "../services/EmployeeService";
 
 interface Employee {
   id: number;

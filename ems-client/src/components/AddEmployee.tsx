@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { addEmployee } from "../services/EmployeeService";
+import { useState } from "react";
 
 interface Employee {
   firstName: string;
@@ -37,13 +38,14 @@ const AddEmployee = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setIsLoading(true);
 
     if (validateForm()) {
       console.log(formData);
+      await addEmployee(formData);
       // Reset form if needed
       setFormData({ firstName: "", lastName: "", email: "" });
     }
