@@ -24,4 +24,14 @@ const updateEmployee = (employee: Employee, employeeId: number) => {
   return axios.put(`${REST_API_URL}/${employeeId}`, employee);
 };
 
-export { listEmployees, addEmployee, getSingleEmployee, updateEmployee };
+const deleteEmployee = (employeeId: number) => {
+  return axios.delete(`${REST_API_URL}/${employeeId}`);
+};
+
+export {
+  listEmployees,
+  addEmployee,
+  getSingleEmployee,
+  updateEmployee,
+  deleteEmployee,
+};
