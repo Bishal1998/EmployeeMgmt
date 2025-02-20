@@ -1,9 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import ListEmployee from "./components/ListEmployee.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
+import ListEmployee from "./components/ListEmployee.tsx";
 import AddEmployee from "./components/AddEmployee.tsx";
+import UpdateEmployee from "./components/UpdateEmployee.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<ListEmployee />} />
         <Route path="/employees" element={<ListEmployee />} />
         <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="/update-employee/:id" element={<UpdateEmployee />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

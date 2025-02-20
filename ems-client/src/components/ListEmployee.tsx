@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { listEmployees } from "../services/EmployeeService";
+import { AiFillEdit } from "@react-icons/all-files/ai/AiFillEdit";
 
 interface Employee {
   id: number;
@@ -61,6 +62,10 @@ const ListEmployee = () => {
     navigate("/add-employee");
   };
 
+  const updateEmployee = (employeeId: number) => {
+    navigate(`/update-employee/${employeeId}`);
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto my-8 px-4">
       <h2 className="font-bold text-2xl mb-6 text-gray-800">
@@ -94,6 +99,9 @@ const ListEmployee = () => {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
                   E-mail
                 </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -113,6 +121,13 @@ const ListEmployee = () => {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700">
                     {employee.email}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    <AiFillEdit
+                      size={24}
+                      className="cursor-pointer"
+                      onClick={() => updateEmployee(employee.id)}
+                    />
                   </td>
                 </tr>
               ))}
