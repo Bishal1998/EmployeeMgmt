@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { listEmployees } from "../services/EmployeeService";
+import { listEmployees, deleteEmployee } from "../services/EmployeeService";
 import { AiFillEdit } from "@react-icons/all-files/ai/AiFillEdit";
+import { AiFillDelete } from "@react-icons/all-files/ai/AiFillDelete";
 
 interface Employee {
   id: number;
@@ -14,24 +15,25 @@ const ListEmployee = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        setIsLoading(true);
-        const response = await listEmployees();
-        setEmployees(response.data);
-        setError(null);
-      } catch (error) {
-        setError("Failed to fetch employees. Please try again later.");
-        console.error("Error fetching employees:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchEmployees = async () => {
+    try {
+      setIsLoading(true);
+      const response = await listEmployees();
+      setEmployees(response.data);
+      setError(null);
+    } catch (error) {
+      setError("Failed to fetch employees. Please try again later.");
+      console.error("Error fetching employees:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchEmployees();
   }, []);
 
@@ -64,6 +66,24 @@ const ListEmployee = () => {
 
   const updateEmployee = (employeeId: number) => {
     navigate(`/update-employee/${employeeId}`);
+  };
+
+  const handleDelete = async (employeeId: number) => {
+    if (!window.confirm("Are you sure you want to delete this employee?")) {
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      await deleteEmployee(employeeId);
+      await fetchEmployees();
+      setError(null);
+    } catch (error) {
+      setError("Failed to delete employee. Please try again later.");
+      console.error("Error deleting employee:", error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -99,7 +119,10 @@ const ListEmployee = () => {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
                   E-mail
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                <th
+                  colSpan={2}
+                  className="px-6 py-4 text-left text-sm font-semibold text-gray-600"
+                >
                   Actions
                 </th>
               </tr>
@@ -122,11 +145,22 @@ const ListEmployee = () => {
                   <td className="px-6 py-4 text-sm text-gray-700">
                     {employee.email}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
+                  <td className="px-3 py-4 text-sm text-gray-700">
                     <AiFillEdit
+                      color="green"
                       size={24}
                       className="cursor-pointer"
                       onClick={() => updateEmployee(employee.id)}
+                    />
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-700">
+                    <AiFillDelete
+                      color="red"
+                      size={24}
+                      className={`cursor-pointer hover:opacity-80 transition-opacity ${
+                        isDeleting ? "opacity-50" : ""
+                      }`}
+                      onClick={() => !isDeleting && handleDelete(employee.id)}
                     />
                   </td>
                 </tr>
